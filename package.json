@@ -1,0 +1,21 @@
+{
+  "name": "@aspectum/admin-ui-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "React UI kit for Aspectum admin apps.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aspectum-Guide/AspectumAdminUIWeb.git"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./theme.css": "./src/theme.css",
+    "./theme-cs.css": "./src/theme-cs.css"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^1.59.0"
+  }
+}
