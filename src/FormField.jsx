@@ -2,7 +2,7 @@
  * Общий компонент для полей форм.
  * Используется в модальных окнах и страницах редактирования.
  */
-import { Children, useId } from 'react';
+import { Children, forwardRef, useId } from 'react';
 import Button from './Button';
 import { FieldContext, useFieldContextValue } from './FieldContext';
 import Spinner from './Spinner';
@@ -59,41 +59,44 @@ export function Field({ label, error, hint, children, required }) {
   );
 }
 
-/** Стилизованный <input> */
-export function TextInput({ className = '', ...props }) {
+/** Стилизованный <input>. ref попадает на сам <input> (React 18 без forwardRef его не пропускает). */
+export const TextInput = forwardRef(function TextInput({ className = '', ...props }, ref) {
   const controlProps = useFieldControlProps(props);
   return (
     <input
       {...controlProps}
+      ref={ref}
       className={`w-full px-3 py-2 border border-aspectum-border rounded-aspectum-control text-base sm:text-sm min-h-[44px] focus:ring-2 focus:ring-aspectum-primary focus:border-transparent outline-none disabled:bg-aspectum-surface-muted disabled:text-aspectum-text-muted ${className}`}
     />
   );
-}
+});
 
-/** Стилизованный <textarea> */
-export function Textarea({ className = '', rows = 3, ...props }) {
+/** Стилизованный <textarea>. ref попадает на сам <textarea>. */
+export const Textarea = forwardRef(function Textarea({ className = '', rows = 3, ...props }, ref) {
   const controlProps = useFieldControlProps(props);
   return (
     <textarea
       rows={rows}
       {...controlProps}
+      ref={ref}
       className={`w-full px-3 py-2 border border-aspectum-border rounded-aspectum-control text-base sm:text-sm resize-none focus:ring-2 focus:ring-aspectum-primary focus:border-transparent outline-none disabled:bg-aspectum-surface-muted ${className}`}
     />
   );
-}
+});
 
-/** Стилизованный <select> */
-export function Select({ className = '', children, ...props }) {
+/** Стилизованный <select>. ref попадает на сам <select>. */
+export const Select = forwardRef(function Select({ className = '', children, ...props }, ref) {
   const controlProps = useFieldControlProps(props);
   return (
     <select
       {...controlProps}
+      ref={ref}
       className={`w-full bg-aspectum-surface px-3 py-2 border border-aspectum-border rounded-aspectum-control text-base text-aspectum-text sm:text-sm min-h-[44px] focus:ring-2 focus:ring-aspectum-primary focus:border-transparent outline-none disabled:bg-aspectum-surface-muted ${className}`}
     >
       {children}
     </select>
   );
-}
+});
 
 /**
  * Кнопки действий формы (Save / Cancel).

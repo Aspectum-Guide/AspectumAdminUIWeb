@@ -30,6 +30,12 @@ const FOCUSABLE_SELECTOR = [
  *   toolbar   — ReactNode  (закреплённая область между шапкой и прокручиваемым телом)
  *   bodyRef   — ref прокручиваемого тела, например для infinite scroll
  *   bodyClassName — классы тела; при передаче заменяют стандартные padding-классы
+ *   closeLabel — подпись кнопки закрытия для скринридеров (default 'Закрыть')
+ *   zIndex    — z-index подложки (диалог на 1 выше); по умолчанию 100, 110 при priority.
+ *               Нужен приложениям, у которых меню/шапка лежат выше сотни.
+ *
+ * Фокус при открытии и при возврате на элемент-источник ставится с preventScroll,
+ * чтобы страница под диалогом не прыгала.
  */
 export default function Modal({
   open,
@@ -46,6 +52,8 @@ export default function Modal({
   footerClassName = '',
   ariaLabelledBy,
   ariaLabel,
+  closeLabel = 'Закрыть',
+  zIndex,
   priority = false,
 }) {
   const panelRef = useRef(null);
@@ -65,7 +73,7 @@ export default function Modal({
     const panel = panelRef.current;
     if (panel && !panel.contains(document.activeElement)) {
       const initialTarget = panel.querySelector('[autofocus]') || panel.querySelector(FOCUSABLE_SELECTOR) || panel;
-      initialTarget.focus();
+      initialTarget.focus({ preventScroll: true });
     }
 
     const handler = (event) => {
@@ -100,7 +108,7 @@ export default function Modal({
       document.removeEventListener('keydown', handler);
       unregisterModal(token);
       if (previouslyFocused instanceof HTMLElement && previouslyFocused.isConnected) {
-        previouslyFocused.focus();
+        previouslyFocused.focus({ preventScroll: true });
       }
     };
   }, [open]);
@@ -115,7 +123,7 @@ export default function Modal({
     xl: 'max-w-4xl',
   }[size] || 'max-w-lg';
 
-  const overlayZ = priority ? 110 : 100;
+  const overlayZ = zIndex ?? (priority ? 110 : 100);
 
   return (
     <ModalPortal open={open} onClose={onClose} zIndex={overlayZ}>
@@ -140,7 +148,7 @@ export default function Modal({
             {onClose && (
               <IconButton
                 onClick={onClose}
-                label="Закрыть"
+                label={closeLabel}
                 className="ml-auto w-8 h-8"
               >
                 <X className="size-4" aria-hidden="true" />
