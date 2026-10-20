@@ -89,4 +89,40 @@ describe('Modal', () => {
     expect(bodyRef.current?.classList.contains('overflow-y-auto')).toBe(true);
     expect(bodyRef.current?.classList.contains('p-4')).toBe(true);
   });
+
+  it('restores focus to the opener without scrolling the page', () => {
+    const { rerender } = render(
+      <><button type="button">Открыть</button><Modal open={false} title="Форма">Контент</Modal></>,
+    );
+    const trigger = screen.getByRole('button', { name: 'Открыть' });
+    trigger.focus();
+    const focusSpy = vi.spyOn(trigger, 'focus');
+
+    rerender(<><button type="button">Открыть</button><Modal open title="Форма">Контент</Modal></>);
+    rerender(<><button type="button">Открыть</button><Modal open={false} title="Форма">Контент</Modal></>);
+
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('moves the initial focus into the dialog without scrolling the page', () => {
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+    render(<Modal open title="Форма"><button type="button">Первый</button></Modal>);
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    focusSpy.mockRestore();
+  });
+
+  it('lets the app name the close button (English UIs, translations)', () => {
+    render(<Modal open onClose={() => {}} title="Settings" closeLabel="Close">Body</Modal>);
+    expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Закрыть' })).toBeNull();
+  });
+
+  it('closes when the backdrop is clicked', () => {
+    const onClose = vi.fn();
+    render(<Modal open onClose={onClose} title="Форма">Контент</Modal>);
+    const backdrop = document.querySelector('[role="presentation"][aria-hidden="true"]');
+    fireEvent.click(backdrop);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
 });
