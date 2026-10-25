@@ -1,6 +1,6 @@
 {
   "name": "@aspectum/admin-ui-web",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "React UI kit for Aspectum admin apps.",
   "type": "module",
@@ -17,5 +17,19 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "lucide-react": "^1.59.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "jsdom": "^29.1.1",
+    "lucide-react": "^1.59.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^8.3.4",
+    "vitest": "^4.1.11"
   }
 }

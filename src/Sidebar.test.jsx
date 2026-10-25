@@ -53,4 +53,18 @@ describe('Sidebar UI primitives', () => {
     screen.getByRole('button', { name: 'Collapse' }).click();
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it('forwards extra props to the aside without losing its own attributes', () => {
+    const { container } = render(
+      <Sidebar id="main-navigation" data-testid="rail" label="Main navigation">
+        <span>content</span>
+      </Sidebar>,
+    );
+    const aside = container.querySelector('aside');
+
+    expect(aside.id).toBe('main-navigation');
+    expect(aside.getAttribute('data-testid')).toBe('rail');
+    expect(aside.getAttribute('data-ui')).toBe('sidebar');
+    expect(aside.getAttribute('aria-label')).toBe('Main navigation');
+  });
 });
