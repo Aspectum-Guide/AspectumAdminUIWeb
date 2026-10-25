@@ -25,8 +25,8 @@ export default function PageHeader({
   className = '',
 }) {
   return (
-    <div className={`${SPACING_CLASSES[spacing] ?? SPACING_CLASSES.md} flex items-start justify-between gap-3 ${className}`.trim()}>
-      <div>
+    <div className={`${SPACING_CLASSES[spacing] ?? SPACING_CLASSES.md} flex flex-wrap items-start justify-between gap-3 ${className}`.trim()}>
+      <div className="min-w-0">
         <h1 className={`${TITLE_CLASSES[titleSize] || TITLE_CLASSES.md} text-aspectum-text`}>{title}</h1>
         {description ? <p className="mt-1 text-sm text-aspectum-text-muted">{description}</p> : null}
       </div>
